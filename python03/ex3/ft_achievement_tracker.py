@@ -25,17 +25,9 @@ def ft_achievement_tracker() -> None:
     common_all: set[str] = alice & bob & charlie
     print(f"Common to all players: {common_all}\n")
 
-    rare_achievements: set[str] = set()
-    for ach in all_achievements:
-        in_players = 0
-        if ach in alice:
-            in_players += 1
-        if ach in bob:
-            in_players += 1
-        if ach in charlie:
-            in_players += 1
-        if in_players == 1:
-            rare_achievements.add(ach)
+    rare_achievements: set[str] = {ach for ach in all_achievements if
+                                   (ach in alice) + (ach in bob) +
+                                   (ach in charlie) == 1}
     print(f"Rare achievements (1 player): {rare_achievements}\n")
 
     print(f"Alice vs Bob common: {alice & bob}")

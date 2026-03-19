@@ -5,8 +5,8 @@ def ft_score_analytics() -> None:
     print("=== Player Score Analytics ===")
 
     if len(sys.argv) < 2:
-        print("No scores provided. Usage: python3"
-              "ft_score_analytics.py <score1> <scrore2> ...")
+        print("No scores provided. Usage: python3 "
+              "ft_score_analytics.py <score1> <score2> ...")
         return
 
     scores = []

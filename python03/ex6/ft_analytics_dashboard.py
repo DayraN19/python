@@ -31,7 +31,8 @@ def main() -> None:
     print("\n=== List Comprehension Examples ===")
     high_scorers = [p["name"] for p in players if p["score"] > 2000]
     scores_doubled = [p["score"] * 2 for p in players]
-    active_players = [p["name"] for p in players if len(p["achievements"]) > 0]
+    active_players = [p["name"] for p in players if
+                      len(p["achievements"]) >= 2]
 
     print(f"High scorers (>2000): {high_scorers}")
     print(f"Scores doubled: {scores_doubled}")
@@ -40,10 +41,15 @@ def main() -> None:
     print("\n=== Dict Comprehension Examples ===")
     player_scores = {p["name"]: p["score"] for p in players}
 
+    score_ranges = {
+        "high": lambda s: s > 2000,
+        "medium": lambda s: 1500 <= s <= 2000,
+        "low": lambda s: s < 1500
+    }
+
     score_categories = {
-        "high": len([p for p in players if p["score"] > 2000]),
-        "medium": len([p for p in players if 1500 <= p["score"] <= 2000]),
-        "low": len([p for p in players if p["score"] < 1500])
+        category: len([p for p in players if condition(p["score"])])
+        for category, condition in score_ranges.items()
     }
 
     achievement_counts = {p["name"]: len(p["achievements"]) for p in players}
@@ -65,16 +71,19 @@ def main() -> None:
     print(f"Active regions: {active_regions}")
 
     print("\n=== Combined Analysis ===")
-    total_players = len(players)
+    t_pl = len(players)
     total_unique_ach = len(unique_achievements)
-    avg_score = sum(p["score"] for p in players) / total_players
+    avg_score = sum(p["score"] for p in players) / t_pl if t_pl > 0 else 0
 
     leaderboard = sorted([(p["score"], p["name"],
                           len(p["achievements"])) for p in players],
                          reverse=True)
-    top_score, top_name, top_ach = leaderboard[0]
+    if leaderboard:
+        top_score, top_name, top_ach = leaderboard[0]
+    else:
+        top_score, top_name, top_ach = 0, "None", 0
 
-    print(f"Total players: {total_players}")
+    print(f"Total players: {t_pl}")
     print(f"Total unique achievements: {total_unique_ach}")
     print(f"Average score: {avg_score}")
     print(f"Top performer: {top_name} ({top_score} points,"

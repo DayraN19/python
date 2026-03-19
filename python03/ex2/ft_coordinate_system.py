@@ -1,11 +1,11 @@
-import math
+from math import sqrt
 
 
 def ft_coordinate_system(
         x: int, y: int, z: int
 ) -> tuple[tuple[int, int, int], float]:
     position = (x, y, z)
-    distance = math.sqrt(x**2 + y**2 + z**2)
+    distance = sqrt(x**2 + y**2 + z**2)
     print(f"Position created: {position}")
     print(f"Distance between (0, 0, 0) and {position}: {distance:.2f}")
     return position, distance
@@ -24,8 +24,8 @@ def parse_coordinates(coord_str: str) -> tuple[int, int, int] | None:
         position = (x, y, z)
         print(f"Parsed position: {position}")
 
-        distance = math.sqrt(x**2 + y**2 + z**2)
-        print(f"Distance between (0, 0, 0) and {position}: {distance:.1f}")
+        distance = sqrt(x**2 + y**2 + z**2)
+        print(f"Distance between (0, 0, 0) and {position}: {distance:.2f}")
         return position
 
     except ValueError as e:
@@ -41,7 +41,7 @@ def parse_coordinates(coord_str: str) -> tuple[int, int, int] | None:
 def main() -> None:
     print("=== Game Coordinate System ===")
 
-    pos1, dist1 = ft_coordinate_system(10, 20, 5)
+    pos1, _ = ft_coordinate_system(10, 20, 5)
 
     coord_str = "3,4,0"
     pos2 = parse_coordinates(coord_str)
