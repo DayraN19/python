@@ -1,21 +1,27 @@
-def ft_command_quest(argv):
+import sys
+
+
+def ft_command_quest(argv: list[str]) -> None:
+    print("=== Command Quest ===")
+
     if len(argv) < 2:
-        print("Error: No Argument provided!")
+        print("No arguments provided!")
+        print(f"Program name: {argv[0]}")
+        print(f"Total arguments: {len(argv)}")
         return
 
     print(f"Program name: {argv[0]}")
-    print(f"Argument Provided: {len(argv)}")
+    print(f"Arguments received: {len(argv) - 1}")
 
-    # Print each argument starting from index 1
-    for i in range(1, len(argv)):
-        print(f"Argument {i}: {argv[i]}")
+    index = 1
+    for arg in argv[1:]:
+        print(f"Argument {index}: {arg}")
+        index += 1
 
-    # Total arguments excluding program name
-    print(f"Total Arguments: {len(argv)}")
+    print(f"Total arguments: {len(argv)}")
 
 
-def main():
-    import sys
+def main() -> None:
     ft_command_quest(sys.argv)
 
 

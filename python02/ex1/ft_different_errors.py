@@ -1,55 +1,56 @@
-def garden_operations():
+def garden_operations(arg: str) -> None:
+    try:
+        if arg == "value":
+            int("abc")
 
-    int("abc")
+        elif arg == "zero":
+            10 / 0
 
-    10 / 0
+        elif arg == "file":
+            open("missing.txt", "r")
 
-    file = open("missing.txt", "r")
-    file.close()
+        elif arg == "key":
+            plants = {"rose": 10}
+            plants["missing_plant"]
 
-    plants = {"rose": 10}
-    plants["missing_plant"]
+    except ValueError as e:
+        print(f"Caught ValueError: {e}")
+
+    except ZeroDivisionError as e:
+        print(f"Caught ZeroDivisionError: {e}")
+
+    except FileNotFoundError:
+        print("Caught FileNotFoundError: No such file 'missing.txt'")
+
+    except KeyError as e:
+        print(f"Caught KeyError: {e}")
 
 
-def test_error_types():
-    print("=== Garden Error Types Demo ===")
+def test_error_types() -> None:
+    print("=== Garden Error Types Demo ===\n")
 
     print("Testing ValueError...")
+    garden_operations("value")
+
+    print("\nTesting ZeroDivisionError...")
+    garden_operations("zero")
+
+    print("\nTesting FileNotFoundError...")
+    garden_operations("file")
+
+    print("\nTesting KeyError...")
+    garden_operations("key")
+
+    print("\nTesting multiple errors together...")
     try:
         int("abc")
-    except ValueError as e:
-        print("Caught ValueError:", e)
-
-    print("Testing ZeroDivisionError...")
-    try:
-        10 / 0
-    except ZeroDivisionError as e:
-        print("Caught ZeroDivisionError:", e)
-
-    print("Testing FileNotFoundError...")
-    try:
-        file = open("missing.txt", "r")
-        file.close()
-    except FileNotFoundError as e:
-        print("Caught FileNotFoundError:", e)
-
-    print("Testing KeyError...")
-    try:
-        plants = {"rose": 10}
-        plants["missing_plant"]
-    except KeyError as e:
-        print("Caught KeyError:", e)
-
-    print("Testing multiple errors together...")
-    try:
-        int("abc")
-    except (ValueError, KeyError, ZeroDivisionError):
-        print("Caught an error, but program continues!")
+    except (ValueError, ZeroDivisionError, FileNotFoundError, KeyError):
+        print("Caught an error, but program continues!\n")
 
     print("All error types tested successfully!")
 
 
-def main():
+def main() -> None:
     test_error_types()
 
 

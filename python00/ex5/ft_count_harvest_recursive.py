@@ -9,6 +9,3 @@ def ft_count_harvest_recursive():
 
     max_day = int(input("Days until harvest: "))
     count(1, max_day)
-
-
-ft_count_harvest_recursive()

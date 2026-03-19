@@ -1,9 +1,4 @@
-class Plant:
-    def __init__(self, name):
-        self.name = name
-
-
-def water_plants(plant_list):
+def water_plants(plant_list: list) -> None:
     print("Opening watering system")
     try:
         for plant in plant_list:
@@ -16,7 +11,7 @@ def water_plants(plant_list):
         print("Closing watering system (cleanup)")
 
 
-def test_watering_system():
+def test_watering_system() -> None:
     print("=== Garden Watering System ===")
 
     print("Testing normal watering...")
@@ -30,7 +25,7 @@ def test_watering_system():
     print("Cleanup always happens, even with errors!")
 
 
-def main():
+def main() -> None:
     test_watering_system()
 
 

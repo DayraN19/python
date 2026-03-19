@@ -1,57 +1,46 @@
-def ft_achievement_tracker():
+def ft_achievement_tracker() -> None:
+    print("=== Achievement Tracker System ===\n")
 
-    print("=== Achievement Tracking System ===")
-    print("")
-    mouss = {
-        "first_kill",
-        "level_10",
-        "treasure_hunter",
-        "speed_master",
-        "I.C"
+    alice: set[str] = {'first_kill', 'level_10',
+                       'treasure_hunter', 'speed_demon'}
+    bob: set[str] = {'first_kill', 'level_10', 'boss_slayer', 'collector'}
+    charlie: set[str] = {
+        'level_10',
+        'treasure_hunter',
+        'boss_slayer',
+        'speed_demon',
+        'perfectionist'
     }
 
-    sylv1 = {
-        "first_kill",
-        "level_10",
-        "boss_lady",
-        "collector"
-    }
+    print(f"Player alice achievements: {alice}")
+    print(f"Player bob achievements: {bob}")
+    print(f"Player charlie achievements: {charlie}\n")
 
-    matte = {
-        "level_10",
-        "treasure_hunter",
-        "boss_lady",
-        "speed_master",
-        "perfectionist"
-    }
+    print("=== Achievement Analytics ===\n")
 
-    print("Mouss Achievement:", mouss)
-    print("Sylv1 Achievement:", sylv1)
-    print("Matte Achievement:", matte)
-    print("")
-    print("=== Achievement Analytics ===")
-    all_achievements = mouss.union(sylv1).union(matte)
-    print("All Single Achievement:", all_achievements)
-    print("Number of Achivement:", len(all_achievements))
-    print("")
-    common_achievement = mouss.intersection(sylv1).intersection(matte)
-    print("Common to all players:", common_achievement)
+    all_achievements: set[str] = alice | bob | charlie
+    print(f"All unique achievements: {all_achievements}")
+    print(f"Total unique achievements: {len(all_achievements)}\n")
 
-    mouss_only = mouss.difference(sylv1).difference(matte)
-    sylv1_only = sylv1.difference(mouss).difference(matte)
-    matte_only = matte.difference(mouss).difference(sylv1)
+    common_all: set[str] = alice & bob & charlie
+    print(f"Common to all players: {common_all}\n")
 
-    rare_achievement = mouss_only.union(sylv1_only).union(matte_only)
-    print("Rare Achievement", rare_achievement)
-    print("")
-    mouss_sylv1_common = mouss.intersection(sylv1)
-    print("mouss vs sylv1 common:", mouss_sylv1_common)
+    rare_achievements: set[str] = set()
+    for ach in all_achievements:
+        in_players = 0
+        if ach in alice:
+            in_players += 1
+        if ach in bob:
+            in_players += 1
+        if ach in charlie:
+            in_players += 1
+        if in_players == 1:
+            rare_achievements.add(ach)
+    print(f"Rare achievements (1 player): {rare_achievements}\n")
 
-    mouss_unique = mouss.difference(sylv1)
-    print("mouss unique:", mouss_unique)
-
-    sylv1_unique = sylv1.difference(mouss)
-    print("sylv1 unique:", sylv1_unique)
+    print(f"Alice vs Bob common: {alice & bob}")
+    print(f"Alice unique: {alice - bob}")
+    print(f"Bob unique: {bob - alice}")
 
 
 if __name__ == "__main__":

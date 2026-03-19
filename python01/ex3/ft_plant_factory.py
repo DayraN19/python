@@ -1,15 +1,15 @@
 class Plant:
 
-    def __init__(self, name, height, age):
+    def __init__(self, name: str, height: int, age: int) -> None:
         self.name = name
         self.height = height
         self.age = age
 
-    def display(self):
-        print(f"Created: {self.name}: {self.height}cm, {self.age} days old")
+    def display(self) -> None:
+        print(f"Created: {self.name} ({self.height}cm, {self.age} days)")
 
 
-def main():
+def main() -> None:
     print("=== Plant Factory Output ===")
 
     plant1 = Plant("Rose", 25, 30)
@@ -23,7 +23,7 @@ def main():
 
     for i in range(len(plants)):
         plants[i].display()
-    print(f"Total plants created: {len(plants)}")
+    print(f"\nTotal plants created: {len(plants)}")
 
 
 if __name__ == "__main__":

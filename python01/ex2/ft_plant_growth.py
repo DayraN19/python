@@ -1,25 +1,23 @@
 class Plant:
-    """Plant class with growth and aging behaviors"""
-    def __init__(self, name, height, age, growth_rate=2):
+    def __init__(self, name: str, height: int, age: int) -> None:
         self.name = name
         self.height = height
         self.days_old = age
-        self.growth_rate = growth_rate
 
-    def grow(self):
-        self.height += self.growth_rate
+    def grow(self) -> None:
+        self.height += 1
 
-    def age(self):
+    def age(self) -> None:
         self.days_old += 1
 
-    def get_info(self):
-        return f"{self.name}: {self.height}cm tall, {self.days_old} days old"
+    def get_info(self) -> str:
+        return f"{self.name}: {self.height}cm, {self.days_old} days old"
 
-    def display(self):
+    def display(self) -> None:
         print(self.get_info())
 
 
-def simulate_week(plants):
+def simulate_week(plants: list[Plant]) -> None:
     print("=== Day 1 ===")
     for day in range(1, 8):
         if day == 1:
@@ -35,14 +33,14 @@ def simulate_week(plants):
                     plant.display()
 
     for plant in plants:
-        total_growth = plant.growth_rate * 6
-        print(f"Grow this week: +{total_growth}cm")
+        total_growth = day - 1
+        print(f"Growth this week: +{total_growth}cm")
 
 
-def main():
-    plant1 = Plant("Rose", 25, 30, growth_rate=1)
+def main() -> None:
+    plant1 = Plant("Rose", 25, 30)
 
-    plants = [plant1]
+    plants: list[Plant] = [plant1]
 
     simulate_week(plants)
 

@@ -1,17 +1,16 @@
 import sys
 
 
-def ft_score_analytics():
+def ft_score_analytics() -> None:
     print("=== Player Score Analytics ===")
 
-    # No scores provided
     if len(sys.argv) < 2:
-        print("No scores provided.")
+        print("No scores provided. Usage: python3"
+              "ft_score_analytics.py <score1> <scrore2> ...")
         return
 
     scores = []
 
-    # Parse arguments
     for arg in sys.argv[1:]:
         try:
             score = int(arg)
@@ -19,7 +18,6 @@ def ft_score_analytics():
         except ValueError:
             print(f"Invalid score ignored: {arg}")
 
-    # If all inputs were invalid
     if len(scores) == 0:
         print("No valid scores to analyze.")
         return
@@ -40,7 +38,7 @@ def ft_score_analytics():
     print(f"Score range: {score_range}")
 
 
-def main():
+def main() -> None:
     ft_score_analytics()
 
 
