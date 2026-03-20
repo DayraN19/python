@@ -10,7 +10,7 @@ def main() -> None:
     print(f'[STANDARD] Archive status from {id} : {Status}')
     print(
         "[ALERT] System diagnostic: Communication channels verified",
-        file=sys. stderr
+        file=sys.stderr
         )
     print("[STANDARD] Data transmission complete\n")
     print("Three-channel communication test successful.")

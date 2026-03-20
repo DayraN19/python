@@ -1,4 +1,4 @@
-def crisis_handler(filename):
+def crisis_handler(filename: str) -> None:
     try:
         if filename == "standard_archive.txt":
             print(f"ROUTINE ACCESS: Attempting access to '{filename}'...")
