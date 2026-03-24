@@ -11,7 +11,7 @@ class SpellCard(Card):
         mana = game_state.get("available_mana", 0)
 
         if not self.is_playable(mana):
-            return {"error": "Not enough mana"}
+            return {"Error": "Not enough mana"}
 
         return {
             "card_played": self.name,

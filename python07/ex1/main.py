@@ -1,11 +1,11 @@
-from ex1.SpellCard import SpellCard
-from ex1.ArtifactCard import ArtifactCard
-from ex1.Deck import Deck
+from .SpellCard import SpellCard
+from .ArtifactCard import ArtifactCard
+from .Deck import Deck
 from ex0.CreatureCard import CreatureCard
 
 
 def main() -> None:
-    print("=== DataDeck Deck Builder ===")
+    print("\n=== DataDeck Deck Builder ===\n")
     print("Building deck with different card types...")
 
     deck = Deck()
@@ -21,17 +21,18 @@ def main() -> None:
     stats = deck.get_deck_stats()
     print(f"Deck stats: {stats}")
 
-    print("Drawing and playing cards:")
+    print("\nDrawing and playing cards:\n")
 
     for _ in range(3):
         card = deck.draw_card()
         if card:
-            print(f"Drew: {card.name}"
+            print(f"\nDrew: {card.name}"
                   f"({card.__class__.__name__.replace('Card','')})")
             result = card.play({"available_mana": 10})
             print(f"Play result: {result}")
 
-    print("Polymorphism in action: Same interface, different card behaviors !")
+    print("\nPolymorphism in action: Same interface, "
+          "different card behaviors !")
 
 
 if __name__ == "__main__":

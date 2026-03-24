@@ -9,7 +9,7 @@ print(card.get_info())
 
 print("\nPlaying Fire Dragon with 6 mana available:")
 print(f"Playable: {6 >= card.cost}")
-print(f"Play result: {card.play(6)}")
+print(f"Play result: {card.play({'available_mana': 6})}")
 
 print("\nFire Dragon attacks Goblin Warrior:")
 print(f"Attack result: {card.attack_target('Goblin Warrior')}")
