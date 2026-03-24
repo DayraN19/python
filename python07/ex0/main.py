@@ -1,4 +1,4 @@
-from ex0.Creaturecard import CreatureCard
+from ex0.CreatureCard import CreatureCard
 
 card = CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)
 

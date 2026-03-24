@@ -1,34 +1,52 @@
 from ex0.Card import Card
 import random
-class Deck():
+
+
+class Deck:
     def __init__(self) -> None:
-        # On crée une liste vide qui stockera nos instances de cartes
-        self.cards: list[Card] = []
+        self.cards = []
+
     def add_card(self, card: Card) -> None:
-        # Ajoute l'objet carte à la liste
         self.cards.append(card)
 
-
     def remove_card(self, card_name: str) -> bool:
-        # Cherche la carte par son nom et la retire
-        # Retourne True si trouvé et supprimé, False sinon
-        pass
-
+        for card in self.cards:
+            if card.name == card_name:
+                self.cards.remove(card)
+                return True
+        return False
 
     def shuffle(self) -> None:
-        # Utilise le module random pour mélanger self.cards
         random.shuffle(self.cards)
 
-    def draw_card(self) -> Card:
-        # Retire la dernière carte de la liste et la renvoie
-        # Utilise .pop()
-        return self.cards.pop()
+    def draw_card(self):
+        if len(self.cards) == 0:
+            return None
+        return self.cards.pop(0)
 
     def get_deck_stats(self) -> dict:
-        # Calcule le nombre total, le coût moyen, 
-        # et compte combien de types différents (Creature, Spell, etc.)
-        # Retourne un dictionnaire avec ces infos
-        pass
+        total = len(self.cards)
+        creatures = 0
+        spells = 0
+        artifacts = 0
+        total_cost = 0
 
+        for card in self.cards:
+            total_cost += card.cost
 
-    for card in my_deck: card.play()
+            if card.__class__.__name__ == "CreatureCard":
+                creatures += 1
+            elif card.__class__.__name__ == "SpellCard":
+                spells += 1
+            elif card.__class__.__name__ == "ArtifactCard":
+                artifacts += 1
+
+        avg_cost = total_cost / total if total > 0 else 0
+
+        return {
+            "total_cards": total,
+            "creatures": creatures,
+            "spells": spells,
+            "artifacts": artifacts,
+            "avg_cost": avg_cost
+        }

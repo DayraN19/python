@@ -1,7 +1,9 @@
 from ex0.Card import Card
 
+
 class CreatureCard(Card):
-    def __init__(self, name: str, cost: int, rarity: str, attack: int, health: int) -> dict:
+    def __init__(self, name: str, cost: int, rarity: str,
+                 attack: int, health: int) -> None:
         super(). __init__(name, cost, rarity)
         if attack <= 0 or health <= 0:
             raise ValueError("Attack and health must be positive integers")
@@ -9,7 +11,8 @@ class CreatureCard(Card):
         self.health = health
         self.type = "Creature"
 
-    def play(self, mana_available: int) -> dict:
+    def play(self, game_state: dict) -> dict:
+        mana_available = game_state.get("available_mana", 0)
         playable = mana_available >= self.cost
         if not playable:
             return {
@@ -24,7 +27,6 @@ class CreatureCard(Card):
             "effect": "Creature summoned to battlefield"
         }
 
-
     def attack_target(self, target: str) -> dict:
         return {
             "attacker": self.name,
@@ -32,7 +34,6 @@ class CreatureCard(Card):
             "damage_dealt": self.attack,
             "combat_resolved": True
         }
-
 
     def get_info(self) -> dict:
         return {
