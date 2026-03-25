@@ -27,7 +27,7 @@ def main() -> None:
         card = deck.draw_card()
         if card:
             print(f"\nDrew: {card.name}"
-                  f"({card.__class__.__name__.replace('Card','')})")
+                  f"({card.__class__.__name__.replace('Card', '')})")
             result = card.play({"available_mana": 10})
             print(f"Play result: {result}")
 
