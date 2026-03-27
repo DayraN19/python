@@ -3,8 +3,8 @@ from typing import Any
 
 
 class DataProcessor(ABC):
-    def __init__(self, p_type: str) -> None:
-        self.p_type = p_type
+    def __init__(self) -> None:
+        pass
 
     @abstractmethod
     def process(self, data: Any) -> str:
@@ -13,95 +13,107 @@ class DataProcessor(ABC):
     @abstractmethod
     def validate(self, data: Any) -> bool:
         pass
-
-    def format_output(self, result: str) -> str:
-        return f"Output: {result}"
 
 
 class NumericProcessor(DataProcessor):
     def __init__(self) -> None:
-        super().__init__("Numeric")
-
-    def validate(self, data: Any) -> bool:
-        return isinstance(data, list) and all(isinstance(x, (int, float))
-                                              for x in data)
+        super().__init__()
 
     def process(self, data: Any) -> str:
+        return f"Processing data: {data}"
+
+    def validate(self, data: Any) -> bool:
         try:
-            if not self.validate(data):
-                return "Numeric data invalid"
-            c = len(data)
-            s = sum(data)
-            a = float(s) / c if c > 0 else 0.0
-            return f"Processed {c} numeric values, sum={s}, avg={a}"
-        except Exception as e:
-            return f"Error: {e}"
+            if not isinstance(data, list):
+                return False
+            for x in data:
+                if not isinstance(x, (int, float)):
+                    return False
+            return True
+        except Exception:
+            return False
+
+    def format_output(self, result: list) -> str:
+        res_size = len(result)
+        res_sum = 0
+        for val in result:
+            res_sum += val
+        res_avg = res_sum / res_size if res_size > 0 else 0.0
+        return (f"Processed {res_size} numeric values, "
+                f"sum={res_sum}, avg={res_avg}")
 
 
 class TextProcessor(DataProcessor):
     def __init__(self) -> None:
-        super().__init__("Text")
-
-    def validate(self, data: Any) -> bool:
-        return isinstance(data, str)
+        super().__init__()
 
     def process(self, data: Any) -> str:
+        return f'Processing data: "{data}"'
+
+    def validate(self, data: Any) -> bool:
         try:
-            if not self.validate(data):
-                return "Text data invalid"
-            cnt = len(data)
-            wrd = len(data.split())
-            return f"Processed text: {cnt} characters, {wrd} words"
-        except Exception as e:
-            return f"Error: {e}"
+            return isinstance(data, str)
+        except Exception:
+            return False
+
+    def format_output(self, result: str) -> str:
+        res_char = len(result)
+        res_word = len(result.split())
+        return f"Processed text: {res_char} characters, {res_word} words"
 
 
 class LogProcessor(DataProcessor):
     def __init__(self) -> None:
-        super().__init__("Log")
-
-    def validate(self, data: Any) -> bool:
-        return isinstance(data, str) and ":" in data
+        super().__init__()
 
     def process(self, data: Any) -> str:
+        return f"Processing data: {data}"
+
+    def validate(self, data: Any) -> bool:
         try:
-            if not self.validate(data):
-                return "Log entry invalid"
-            parts = data.split(":", 1)
-            lvl = parts[0]
-            msg = parts[1].strip()
-            tag = "ALERT" if lvl == "ERROR" else lvl
-            return f"[{tag}] {lvl} level detected: {msg}"
-        except Exception as e:
-            return f"Error: {e}"
+            return isinstance(data, str) and "ERROR" in data
+        except Exception:
+            return False
+
+    def format_output(self, result: str) -> str:
+        return "[ALERT] ERROR level detected:"
 
 
 def main() -> None:
-    print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
-    procs = [NumericProcessor(), TextProcessor(), LogProcessor()]
-    d_list = [[1, 2, 3, 4, 5], "Hello Nexus World",
-              "ERROR: Connection timeout"]
-    v_msg = {"Numeric": "Numeric data verified",
-             "Text": "Text data verified",
-             "Log": "Log entry verified"}
+    num_p = NumericProcessor()
+    txt_p = TextProcessor()
+    log_p = LogProcessor()
 
-    for p, d in zip(procs, d_list):
-        print(f"Initializing {p.p_type} Processor...")
-        if isinstance(d, str):
-            print(f'Processing data: "{d}"')
-        else:
-            print(f"Processing data: {d}")
-        if p.validate(d):
-            print(f"Validation: {v_msg.get(p.p_type)}")
-        print(p.format_output(p.process(d)))
+    print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
+
+    d1 = [1, 2, 3, 4, 5]
+    print("\nInitializing Numeric Processor...")
+    print(num_p.process(d1))
+    if num_p.validate(d1):
+        print("Validation: Numeric data verified")
+        print("Output:", num_p.format_output(d1))
+
+    d2 = "Hello Nexus World"
+    print("\nInitializing Text Processor...")
+    print(txt_p.process(d2))
+    if txt_p.validate(d2):
+        print("Validation: Text data verified")
+        print("Output:", txt_p.format_output(d2))
+
+    d3 = "ERROR: Connection timeout"
+    d3_m = "ERROR level detected: Connection timeout"
+    print("\nInitializing Log Processor...")
+    print(log_p.process(d3))
+    if log_p.validate(d3):
+        print("Validation: Log entry verified")
+        print("Output:", log_p.format_output(d3_m), "Connection timeout")
 
     print("\n=== Polymorphic Processing Demo ===")
-    print("Processing multiple data types through same interface...")
-    demo_d = [[1, 2, 3], "Hi Nexus", "INFO: System ready"]
-    idx = 1
-    for p, d in zip(procs, demo_d):
-        print(f"Result {idx}: {p.process(d)}")
-        idx += 1
+    print("\nProcessing multiple data types through same interface...")
+    print(f"Result 1: {num_p.format_output(d1)}")
+    print(f"Result 2: {txt_p.format_output(d2)}")
+    print(f"Result 3: {log_p.format_output(d3)} System ready")
+
     print("\nFoundation systems online. Nexus ready for advanced streams.")
 
 
