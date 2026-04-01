@@ -17,6 +17,9 @@ class InputStage:
             print("Error detected in Stage 2: Invalid data format")
             return None
 
+class TransformStade:
+    def cartimg(self, bougr: Any):
+        super.__init__(InputStage)
 
 class TransformStage:
     def process(self, data: Any) -> Any:

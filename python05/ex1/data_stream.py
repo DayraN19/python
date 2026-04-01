@@ -15,12 +15,11 @@ class DataStream(ABC):
                     criteria: Optional[str] = None) -> List[Any]:
         if criteria is None:
             return data_batch
-        final = [
-            {key: value}
-            for info in data_batch
-            for key, value in info.items()
-            if key == criteria
-            ]
+        final = []
+        for info in data_batch:
+            for key, value in info.items():
+                if key == criteria:
+                    final.append({key: value})
         return final
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
@@ -34,45 +33,37 @@ class SensorStream(DataStream):
     def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
         self.type = "Environmental Data"
-        self.name = "Sensor"
-        self.count = 2
-        self.operation = "readings"
+        self.name, self.operation, self.count = "Sensor", "readings", 2
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self.batch = data_batch
         parts = []
-        temp = []
-
+        temp_sum = 0.0
+        temp_count = 0
         for d in data_batch:
             for key, value in d.items():
                 parts.append(f"{key}:{value}")
                 if key == "temp":
-                    temp.append(value)
+                    temp_sum += value
+                    temp_count += 1
 
         data_str = "[" + ", ".join(parts) + "]"
-        sum_temp = sum(temp)
-        len_temp = len(temp)
-        avg_temp = sum_temp / len_temp if len_temp else 0
+        total_readings = len(parts)
+        avg_temp = temp_sum / temp_count if temp_count > 0 else 0.0
+
         print(f"Stream ID: {self.stream_id}, Type: {self.type}")
-        return (
-            f"Processing sensor batch: {data_str}\nSensor "
-            f"analysis: {len_temp} readings processed, avg temp: {avg_temp}°C"
-        )
+        return (f"Processing sensor batch: {data_str}\n"
+                f"Sensor analysis: {total_readings} readings processed, "
+                f"avg temp: {avg_temp}°C")
 
 
 class TransactionStream(DataStream):
     def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
         self.type = "Financial Data"
-        self.batch = []
-        self.name = "Transaction"
-        self.count = 4
-        self.operation = "operations"
+        self.name, self.operation, self.count = "Transaction", "operations", 4
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self.batch = data_batch
         parts = []
-
         for d in data_batch:
             for key, value in d.items():
                 parts.append(f"{key}:{value}")
@@ -80,46 +71,44 @@ class TransactionStream(DataStream):
         buy = self.filter_data(data_batch, "buy")
         sell = self.filter_data(data_batch, "sell")
 
-        buy_clean = [value for un in buy for value in un.values()]
-        sell_clean = [value for un in sell for value in un.values()]
+        total_buy = 0
+        for d in buy:
+            for v in d.values():
+                total_buy += v
+
+        total_sell = 0
+        for d in sell:
+            for v in d.values():
+                total_sell += v
 
         data_str = "[" + ", ".join(parts) + "]"
-        len_temp = len(buy_clean) + len(sell_clean)
-        net_flow = sum(buy_clean) - sum(sell_clean)
+        net_flow = total_buy - total_sell
+
         print(f"Stream ID: {self.stream_id}, Type: {self.type}")
-        return (
-            f"Processing transaction batch: {data_str}\n"
-            f"Transaction analysis: {len_temp} operations, "
-            f"net flow: +{net_flow} units"
-        )
+        return (f"Processing transaction batch: {data_str}\n"
+                f"Transaction analysis: {len(parts)} operations, "
+                f"net flow: +{net_flow} units")
 
 
 class EventStream(DataStream):
     def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
         self.type = "System Events"
-        self.batch = []
-        self.name = "Event"
-        self.count = 3
-        self.operation = "events"
+        self.name, self.operation, self.count = "Event", "events", 3
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self.batch = data_batch
         parts = []
-        error = 0
-
+        error_count = 0
         for d in data_batch:
             parts.append(f"{d}")
             if d == "error":
-                error += 1
+                error_count += 1
 
         data_str = "[" + ", ".join(parts) + "]"
-        len_parts = len(parts)
         print(f"Stream ID: {self.stream_id}, Type: {self.type}")
-        return (
-            f"Processing events batch: {data_str}\n"
-            f"Event analysis: {len_parts} events, {error} error detected"
-        )
+        return (f"Processing events batch: {data_str}\n"
+                f"Event analysis: {len(parts)} events, "
+                f"{error_count} error detected")
 
 
 class StreamProcessor:

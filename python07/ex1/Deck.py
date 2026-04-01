@@ -19,7 +19,7 @@ class Deck:
     def shuffle(self) -> None:
         random.shuffle(self.cards)
 
-    def draw_card(self) -> None | str:
+    def draw_card(self) -> Card | str:
         if len(self.cards) == 0:
             return None
         return self.cards.pop(0)

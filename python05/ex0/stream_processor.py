@@ -87,6 +87,7 @@ def main() -> None:
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
 
     d1 = [1, 2, 3, 4, 5]
+    d1_m = [1, 2, 3]
     print("\nInitializing Numeric Processor...")
     print(num_p.process(d1))
     if num_p.validate(d1):
@@ -110,7 +111,7 @@ def main() -> None:
 
     print("\n=== Polymorphic Processing Demo ===")
     print("\nProcessing multiple data types through same interface...")
-    print(f"Result 1: {num_p.format_output(d1)}")
+    print(f"Result 1: {num_p.format_output(d1_m)}")
     print(f"Result 2: {txt_p.format_output(d2)}")
     print(f"Result 3: {log_p.format_output(d3)} System ready")
 
