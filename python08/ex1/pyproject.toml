@@ -1,0 +1,20 @@
+[project]
+name = "loading"
+version = "0.1.0"
+description = "Matrix data analysis tool"
+authors = [
+    {name = "bgranier"}
+]
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas (==0)",
+    "numpy (==0)",
+    "matplotlib (==0)",
+    "requests (==0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
