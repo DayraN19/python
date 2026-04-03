@@ -25,7 +25,7 @@ if construct() is True:
     print("Then run this program again.")
 
 if construct() is False:
-    print("\n MATRIX STATUS: Welcome to the construct\n")
+    print("\nMATRIX STATUS: Welcome to the construct\n")
     print(f"Current Python: {sys.executable}")
     print(f"Virtual Environment: {os.path.basename(sys.prefix)} ")
     print(f"Environment path: {sys.prefix}\n")
