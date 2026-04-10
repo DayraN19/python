@@ -1,70 +1,80 @@
 import sys
-import os
 import importlib.util
-import importlib
 from typing import Dict
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+REQUIRED_PACKAGES: list[str] = ["pandas", "numpy", "matplotlib", "requests"]
 
 
-def check_dependencies(packages: list) -> Dict[str, str]:
-    versions = {}
+def check_dependencies(packages: list[str]) -> Dict[str, str]:
+    versions: Dict[str, str] = {}
+    print("LOADING STATUS: Loading programs...")
     print("Checking dependencies:")
-    for pkg in packages:
-        spec = importlib.util.find_spec(pkg)
-        if spec is None:
-            print(f"[ERROR] {pkg} is missing!")
-            print("To install: pip install -r requirements.txt OR"
-                  "poetry install")
-            sys.exit(1)
 
-        module = importlib.import_module(pkg)
-        version = getattr(module, "__version__", "unknown")
-        versions[pkg] = version
-        print(f"[OK] {pkg} ({version}) - Ready")
+    missing_any = False
+
+    for pkg in packages:
+        try:
+            spec = importlib.util.find_spec(pkg)
+            if spec is None:
+                print(f"[ERROR] {pkg} is missing!")
+                missing_any = True
+                continue
+
+            module = importlib.import_module(pkg)
+            version = getattr(module, "__version__", "unknown")
+            versions[pkg] = version
+
+            labels = {
+                "pandas": "Data manipulation ready",
+                "numpy": "Numerical computation ready",
+                "matplotlib": "Visualization ready",
+                "requests": "Network access ready",
+            }
+            print(f"[OK] {pkg} ({version}) - {labels.get(pkg, 'Ready')}")
+
+        except Exception as e:
+            print(f"[ERROR] Could not load {pkg}: {e}")
+            missing_any = True
+
+    if missing_any:
+        print("\nMissing dependencies detected.")
+        print("Install with:pip install -r requirements.txt OR poetry install")
+        sys.exit(1)
+
     return versions
 
 
-def detect_manager() -> str:
-    if ("poetry" in sys.executable.lower()
-            or os.path.exists("../pyproject.toml")):
-        return "Poetry (Advanced Dependency Management)"
-    return "Pip/Venv (Standard Requirements)"
-
-
-def run_analysis() -> None:
+def analyze_data() -> None:
     try:
+        import numpy as np
+        import pandas as pd
+        import matplotlib.pyplot as plt
+
         print("\nAnalyzing Matrix data...")
+
         data = np.random.randn(1000)
-        df = pd.DataFrame(data, columns=["Matrix Data"])
+        df = pd.DataFrame(data, columns=["values"])
         print(f"Processing {len(df)} data points...")
 
         print("Generating visualization...")
-        plt.figure(figsize=(10, 6))
-        plt.hist(df["Matrix Data"], bins=30, color='blue', alpha=0.7)
+        plt.figure(figsize=(8, 5))
+        plt.hist(df["values"], bins=30, color='green', alpha=0.7)
         plt.title("Matrix Data Distribution")
-        plt.grid(True, alpha=0.3)
-
         plt.savefig("matrix_analysis.png")
         plt.close()
-        print("Analysis complete! Results saved to: matrix_analysis.png")
 
+        print("Analysis complete!")
+        print("Results saved to: matrix_analysis.png")
+
+    except ImportError as e:
+        print(f"[ERROR] Missing library during execution: {e}")
     except Exception as e:
-        print(f"[ERROR] An analysis error occurred: {e}")
-        sys.exit(1)
+        print(f"[ERROR] An unexpected error occurred: {e}")
 
 
 def main() -> None:
-    print("LOADING STATUS: Loading programs...")
-
-    packages = ["pandas", "numpy", "matplotlib", "requests"]
-    check_dependencies(packages)
-
-    print(f"\nMODE: Running with {detect_manager()}")
-
-    run_analysis()
+    check_dependencies(REQUIRED_PACKAGES)
+    analyze_data()
 
 
 if __name__ == "__main__":

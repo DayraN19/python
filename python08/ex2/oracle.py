@@ -1,63 +1,74 @@
 import os
-from typing import List, Optional
-from dotenv import load_dotenv
+import sys
 
-
-def load_config() -> None:
-    load_dotenv()
-
-
-def check_security() -> None:
-    print("\nEnvironment security check:")
-
-    if os.path.exists(".env"):
-        print("[OK] .env file properly configured")
-    else:
-        print("[WARNING] .env file missing")
-
-    if os.getenv("MATRIX_MODE") == "production":
-        print("[OK] Production overrides available")
-    else:
-        print("[INFO] Running in development mode")
-
-    print("[OK] No hardcoded secrets detected")
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    print("[ERROR] 'python-dotenv' module not found.")
+    print("Please install it using: pip install python-dotenv")
+    print("OR use: poetry install")
+    sys.exit(1)
 
 
 def main() -> None:
+
+    env_load = load_dotenv()
+
+    mode = os.getenv("MATRIX_MODE")
+    db_url = os.getenv("DATABASE_URL")
+    api_key = os.getenv("API_KEY")
+    log_level = os.getenv("LOG_LEVEL")
+    zion_url = os.getenv("ZION_ENDPOINT")
+
     print("ORACLE STATUS: Reading the Matrix...")
-    load_config()
 
-    mode: str = os.getenv("MATRIX_MODE", "development")
-    db_url: Optional[str] = os.getenv("DATABASE_URL")
-    api_key: Optional[str] = os.getenv("API_KEY")
-    log_level: Optional[str] = os.getenv("LOG_LEVEL")
-    zion_url: Optional[str] = os.getenv("ZION_ENDPOINT")
+    if not env_load and not any([mode, db_url, api_key, log_level, zion_url]):
+        print("\n[!] CRITICAL: No configuration detected.")
+        print("Please create a .env file: 'cp .env.example .env'")
+        print("Or provide environment variables directly.")
+        print("\nEnvironment security check:")
+        print("[WARNING] .env file missing")
+        sys.exit(0)
 
-    vars_to_check = {
+    vars_check = {
+        "MATRIX_MODE": mode,
         "DATABASE_URL": db_url,
         "API_KEY": api_key,
         "LOG_LEVEL": log_level,
         "ZION_ENDPOINT": zion_url
     }
-    
-    missing: List[str] = [name for name, val in vars_to_check.items() if not val]
+
+    missing = [name for name, val in vars_check.items() if not val]
 
     if missing:
-        print("Missing configuration:")
+        print("\nMissing configuration:")
         for var in missing:
             print(f"- {var}")
-        print("\nUse .env file or environment variables.")
-    else:
-        print("\nConfiguration loaded:")
-        print(f"Mode: {mode}")
-        
-        db_status = "local instance" if "localhost" in db_url else "remote instance"
-        print(f"Database: Connected to {db_status}")
-        print("API Access: Authenticated")
-        print(f"Log Level: {log_level}")
-        print("Zion Network: Online")
+        sys.exit(0)
 
-    check_security()
+    print("\nConfiguration loaded:")
+    print(f"Mode: {mode}")
+
+    if db_url and "localhost" in db_url:
+        db_type = "local instance"
+    else:
+        db_type = "remote instance"
+
+    print(f"Database: Connected to {db_type}")
+    print("API Access: Authenticated")
+    print(f"Log Level: {log_level}")
+    print("Zion Network: Online")
+    print("API Access: Authenticated")
+    print(f"Log Level: {log_level}")
+    print("Zion Network: Online")
+
+    print("\nEnvironment security check:")
+    print("[OK] No hardcoded secrets detected")
+    print("[OK] .env file properly configured")
+
+    if "MATRIX_MODE" in os.environ:
+        print("[OK] Production overrides available")
+
     print("\nThe Oracle sees all configurations.")
 
 

@@ -19,9 +19,7 @@ if construct() is True:
     print("To enter the construct, run:")
     print("python -m venv matrix_env")
     print("source matrix_env/bin/activate # On Unix")
-    print("matrix_env")
-    print("Scripts")
-    print("activate     # On Windows\n")
+    print("matrix_env/Scripts/activate  # On Windows\n")
     print("Then run this program again.")
 
 if construct() is False:
@@ -30,7 +28,7 @@ if construct() is False:
     print(f"Virtual Environment: {os.path.basename(sys.prefix)} ")
     print(f"Environment path: {sys.prefix}\n")
     print("SUCCESS: You're in an isolated environment!")
-    print("Safe to install packages without affecting the global system.\n")
+    print("Safe to install packages without affecting\nthe global system.\n")
     print(f"Package installation path:\n {site.getsitepackages()[0]}")
 
 
